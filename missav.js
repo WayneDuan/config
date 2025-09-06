@@ -13,6 +13,13 @@ const appConfig = {
     site: 'https://missav.ai',
     tabs: [
         {
+            name: 'FC2',
+            ui: 1,
+            ext: {
+                id: 'dm95/cn/fc2',
+            },
+        },
+        {
             name: '中文字幕',
             ui: 1,
             ext: {
@@ -54,14 +61,6 @@ const appConfig = {
                 id: 'dm207/cn/monthly-hot',
             },
         },
-        {
-            name: 'FC2',
-            ui: 1,
-            ext: {
-                id: 'dm95/cn/fc2',
-            },
-        },
-       
         {
             name: '一本道',
             ui: 1,
