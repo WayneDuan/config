@@ -13,10 +13,17 @@ const appConfig = {
     site: 'https://missav.ai',
     tabs: [
         {
-            name: 'FC2',
+            name: 'FC2月度',
             ui: 1,
             ext: {
-                id: 'dm95/cn/fc2',
+                id: 'dm95/cn/fc2?sort=monthly_views',
+            },
+        },
+         {
+            name: 'FC2保存数量',
+            ui: 1,
+            ext: {
+                id: 'dm95/cn/fc2?sort=saved',
             },
         },
         {
