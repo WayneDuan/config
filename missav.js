@@ -16,63 +16,28 @@ const appConfig = {
             name: 'FC2月度',
             ui: 1,
             ext: {
-                id: 'dm99/ja/fc2',
+                id: 'dm99/ja/fc2?sort=monthly_views',
             },
         },      
         {
             name: '中文字幕',
             ui: 1,
             ext: {
-                id: 'dm265/cn/chinese-subtitle',
-            },
-        },
-        {
-            name: '最近更新',
-            ui: 1,
-            ext: {
-                id: 'dm513/cn/new',
+                id: 'dm265/cn/chinese-subtitle?sort=monthly_views',
             },
         },
         {
             name: '无码流出',
             ui: 1,
             ext: {
-                id: 'dm561/cn/uncensored-leak',
-            },
-        },
-        {
-            name: '今日热门',
-            ui: 1,
-            ext: {
-                id: 'dm242/cn/today-hot',
-            },
-        },
-        {
-            name: '本週热门',
-            ui: 1,
-            ext: {
-                id: 'dm168/cn/weekly-hot',
-            },
-        },
-        {
-            name: '本月热门',
-            ui: 1,
-            ext: {
-                id: 'dm207/cn/monthly-hot',
-            },
-        },
-        {
-            name: '一本道',
-            ui: 1,
-            ext: {
-                id: 'dm58345/cn/1pondo',
+                id: 'dm561/cn/uncensored-leak?sort=monthly_views',
             },
         },
         {
             name: '麻豆传媒',
             ui: 1,
             ext: {
-                id: 'dm34/cn/madou',
+                id: 'dm34/cn/madou?sort=monthly_views',
             },
         },
        
@@ -133,7 +98,7 @@ async function getCards(ext) {
         })
     }
 
-    const url = appConfig.site + `/${id}?page=${page}`
+    const url = appConfig.site + `/${id}&page=${page}`
 
     const { data } = await $fetch.get(url, {
         headers: {
