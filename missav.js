@@ -16,14 +16,14 @@ const appConfig = {
             name: 'FC2月度',
             ui: 1,
             ext: {
-                id: 'dm95/cn/fc2?sort=monthly_views',
+                id: 'dm99/ja/fc2?sort=monthly_views',
             },
         },
          {
             name: 'FC2保存数量',
             ui: 1,
             ext: {
-                id: 'dm95/cn/fc2?sort=saved',
+                id: 'dm99/ja/fc2?sort=saved',
             },
         },
         {
@@ -76,33 +76,13 @@ const appConfig = {
             },
         },
         {
-            name: 'XXX-AV',
-            ui: 1,
-            ext: {
-                id: 'dm26/cn/xxxav',
-            },
-        },
-        {
             name: '麻豆传媒',
             ui: 1,
             ext: {
                 id: 'dm34/cn/madou',
             },
         },
-        {
-            name: 'TWAV AV',
-            ui: 1,
-            ext: {
-                id: 'dm17/cn/twav',
-            },
-        },
-        {
-            name: 'Furuke AV',
-            ui: 1,
-            ext: {
-                id: 'dm15/cn/furuke',
-            },
-        },
+       
     ],
 }
 
