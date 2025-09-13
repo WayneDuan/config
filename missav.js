@@ -16,16 +16,9 @@ const appConfig = {
             name: 'FC2月度',
             ui: 1,
             ext: {
-                id: 'dm99/ja/fc2?sort=monthly_views',
+                id: 'dm99/ja/fc2',
             },
-        },
-         {
-            name: 'FC2保存数量',
-            ui: 1,
-            ext: {
-                id: 'dm99/ja/fc2?sort=saved',
-            },
-        },
+        },      
         {
             name: '中文字幕',
             ui: 1,
