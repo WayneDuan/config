@@ -13,10 +13,10 @@ const appConfig = {
     site: 'https://missav.ai',
     tabs: [
         {
-            name: 'FC2月度榜',
+            name: 'FC2发布时间',
             ui: 1,
             ext: {
-                id: 'dm99/cn/fc2?sort=monthly_views',
+                id: 'dm99/cn/fc2?sort=published_at',
             },
         },    
         {
@@ -26,6 +26,19 @@ const appConfig = {
                 id: 'dm99/cn/fc2?sort=saved',
             },
         },    
+       {
+            name: 'AV收藏榜',
+            ui: 1,
+            ext: {
+                id: 'dm514/ja/new?sort=views',
+            },
+        }, {
+            name: '一本道好看榜',
+            ui: 1,
+            ext: {
+                id: 'dm695579/ja/1pondo?sort=views',
+            },
+        }, 
         {
             name: '中文字幕',
             ui: 1,
