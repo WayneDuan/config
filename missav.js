@@ -20,12 +20,19 @@ const appConfig = {
             },
         },    
         {
-            name: 'FC2收藏榜',
+            name: 'FC 周榜',
             ui: 1,
             ext: {
-                id: 'dm99/cn/fc2?sort=saved',
+                id: 'dm99/cn/fc2?sort=weekly_views',
             },
-        },    
+        },  
+        {
+            name: 'monthly_views',
+            ui: 1,
+            ext: {
+                id: 'dm257/ja/monthly-hot?sort=monthly_views',
+            },
+        },   
        {
             name: 'AV收藏榜',
             ui: 1,
@@ -47,10 +54,10 @@ const appConfig = {
             },
         },
         {
-            name: '无码流出',
+            name: '无码月榜',
             ui: 1,
             ext: {
-                id: 'dm561/cn/uncensored-leak?sort=monthly_views',
+                id: 'dm561/ja/uncensored-leak?sort=monthly_views',
             },
         },
         {
