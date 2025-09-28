@@ -14,17 +14,11 @@ let appConfig = {
             },
             ui: 1,
         },
-        {
-            name: 'newest',
-            ext: {
-                id: 'cm',
-            },
-            ui: 1,
-        },
+        
         {
             name: 'most viewed',
             ext: {
-                id: 'mv',
+                id: 'c=111&o=mv&t=t',
             },
             ui: 1,
         },
