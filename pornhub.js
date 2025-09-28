@@ -22,20 +22,6 @@ let appConfig = {
             },
             ui: 1,
         },
-        {
-            name: 'hottest',
-            ext: {
-                id: 'ht',
-            },
-            ui: 1,
-        },
-        {
-            name: 'top rated',
-            ext: {
-                id: 'tr',
-            },
-            ui: 1,
-        },
     ],
 }
 
@@ -54,7 +40,7 @@ async function getCards(ext) {
             url = url + `page=${page}`
         }
     } else {
-        url = `${appConfig.site}/video?o=${id}`
+        url = `${appConfig.site}/video?${id}`
         if (page > 1) {
             url = url + `&page=${page}`
         }
