@@ -23,7 +23,7 @@ const appConfig = {
             name: '推荐',
             ui: 1,
             ext: {
-                id: 'dm194/cn',
+                id: 'cn/search/口交?sort=published_at',
             },
         },  
         {
