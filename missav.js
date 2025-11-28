@@ -23,7 +23,7 @@ const appConfig = {
             name: '口',
             ui: 1,
             ext: {
-                id: 'cn/tags/口交',
+                id: 'cn/tags/口交?sort=published_at',
             },
         },  
         {
