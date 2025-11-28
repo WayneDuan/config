@@ -20,10 +20,10 @@ const appConfig = {
             },
         },    
         {
-            name: '推荐',
+            name: '口',
             ui: 1,
             ext: {
-                id: 'cn/search/口交?sort=published_at',
+                id: 'cn/tags/口交',
             },
         },  
         {
