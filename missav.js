@@ -16,55 +16,35 @@ const appConfig = {
             name: 'FC2发布时间',
             ui: 1,
             ext: {
-                id: 'dm99/cn/fc2?sort=published_at',
+                id: 'dm150/cn/fc2?sort=published_at',
             },
         },    
         {
-            name: 'FC 周榜',
+            name: '推荐',
             ui: 1,
             ext: {
-                id: 'dm99/cn/fc2?sort=weekly_views',
+                id: 'dm194/cn',
             },
         },  
         {
-            name: 'monthly_views',
+            name: '无码最近更新',
             ui: 1,
             ext: {
-                id: 'dm257/ja/monthly-hot?sort=monthly_views',
+                id: 'dm628/cn/uncensored-leak?sort=published_at',
             },
         },   
-       {
-            name: 'AV收藏榜',
-            ui: 1,
-            ext: {
-                id: 'dm514/ja/new?sort=views',
-            },
-        }, {
-            name: '一本道好看榜',
-            ui: 1,
-            ext: {
-                id: 'dm695579/ja/1pondo?sort=views',
-            },
-        }, 
         {
-            name: '中文字幕',
+            name: '无码周榜',
             ui: 1,
             ext: {
-                id: 'dm265/cn/chinese-subtitle?sort=monthly_views',
-            },
-        },
-        {
-            name: '无码月榜',
-            ui: 1,
-            ext: {
-                id: 'dm561/ja/uncensored-leak?sort=monthly_views',
+                id: 'dm628/cn/uncensored-leak?sort=weekly_views',
             },
         },
         {
             name: '麻豆传媒',
             ui: 1,
             ext: {
-                id: 'dm34/cn/madou?sort=monthly_views',
+                id: 'dm35/cn/madou?sort=published_at',
             },
         },
        
