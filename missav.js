@@ -208,9 +208,9 @@ async function search(ext) {
     ext = argsify(ext)
     let cards = []
 
-    let text = encodeURIComponent(ext.text)
+    //let text = encodeURIComponent(ext.text)
     let page = ext.page || 1
-    let url = appConfig.site + `/cn/search/${text}?page=${page}`
+    let url = appConfig.site + `/cn/search/${ext.text}?page=${page}`
     const { data } = await $fetch.get(url, {
         headers: {
             'User-Agent': UA,
