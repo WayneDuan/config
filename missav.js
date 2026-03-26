@@ -149,7 +149,7 @@ async function getCards(ext) {
 async function getTracks(ext) {
     ext = argsify(ext)
     let url = ext.url
-    let m3u8Prefix = 'https://surrit.com/'
+    let m3u8Prefix = 'https://missav.ai/'
     let m3u8Suffix = '/playlist.m3u8'
     let tracks = []
 
