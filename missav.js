@@ -316,12 +316,12 @@ async function getTracks(ext) {
 async function getPlayinfo(ext) {
     ext = argsify(ext)
     const url = ext.url
-
-    return jsonify({ urls: [url] ,headers: {
-            'User-Agent': UA,
+  const headers = {
+        'User-Agent': UA,
             'Referer': 'https://missav.ai/',
             'Origin': 'https://missav.ai'
-        }})
+    }
+    return jsonify({ urls: [url] ,headers: [headers]})
 }
 
 async function search(ext) {
