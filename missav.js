@@ -287,9 +287,15 @@ async function getTracks(ext) {
                 }
             })
         }
-
+         // --- 核心优化：排序逻辑 ---
+          tracks.sort((a, b) => {
+                // 提取名字中的数字进行对比，例如 "1080P" -> 1080
+                let valA = parseInt(a.name) || 0
+                let valB = parseInt(b.name) || 0
+                return valB - valA // 降序排列：大的在前
+            })
         // 始终添加一个“自动”选项放在最后
-        tracks.push({
+        tracks.unshift({
             name: '自动 (Auto)',
             ext: {
                 url: masterM3u8
@@ -311,7 +317,11 @@ async function getPlayinfo(ext) {
     ext = argsify(ext)
     const url = ext.url
 
-    return jsonify({ urls: [url] })
+    return jsonify({ urls: [url] ,headers: {
+            'User-Agent': UA,
+            'Referer': 'https://missav.ai/',
+            'Origin': 'https://missav.ai'
+        }})
 }
 
 async function search(ext) {
