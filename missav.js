@@ -150,50 +150,62 @@ async function getTracks(ext) {
     ext = argsify(ext)
     let url = ext.url
     let m3u8Prefix = 'https://surrit.com/'
-    let m3u8Suffix = '/playlist.m3u8'
     let tracks = []
 
     const { data } = await $fetch.get(url, {
-        headers: {
-            'User-Agent': UA,
-        },
+        headers: { 'User-Agent': UA },
     })
+
+    // 1. 提取 UUID
     const match = data.match(/nineyu\.com\\\/(.+)\\\/seek\\\/_0\.jpg/)
     if (match && match[1]) {
         let uuid = match[1]
-        const { data: data1 } = await $fetch.get(m3u8Prefix + uuid + m3u8Suffix, {
-            headers: {
-                'User-Agent': UA,
-            }
+        const masterM3u8Url = `${m3u8Prefix}${uuid}/playlist.m3u8`
+        
+        const { data: m3u8Content } = await $fetch.get(masterM3u8Url, {
+            headers: { 'User-Agent': UA }
         })
-        const lines = data1.split('\n');
-        const matches = lines.filter(line => line.includes('/video.m3u8'));
-        matches.forEach(match => {
-            const name = match.replace('/video.m3u8', '')
-            tracks.unshift({
-                name: name,
-                pan: '',
-                ext: {
-                    url: `${m3u8Prefix}${uuid}/${match}`,
+
+        // 2. 解析不同分辨率的子 m3u8
+        // 匹配格式通常为: #EXT-X-STREAM-INF:BANDWIDTH=...,RESOLUTION=1280x720\n(filename)/video.m3u8
+        const lines = m3u8Content.split('\n')
+        
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i].trim()
+            if (line.includes('RESOLUTION=')) {
+                // 获取分辨率文字，例如 "1280x720"
+                let resMatch = line.match(/RESOLUTION=(\d+x\d+)/)
+                let resolution = resMatch ? resMatch[1] : 'Unknown'
+                
+                // 下一行通常是对应的 URL 路径
+                let nextLine = lines[i + 1] ? lines[i + 1].trim() : ''
+                if (nextLine && nextLine.endsWith('.m3u8')) {
+                    // 如果路径是相对的（不含 http），则手动拼接
+                    let finalUrl = nextLine.startsWith('http') ? nextLine : `${m3u8Prefix}${uuid}/${nextLine}`
+                    
+                    tracks.push({
+                        name: resolution,
+                        pan: '',
+                        ext: { url: finalUrl }
+                    })
                 }
-            })
-        })
-        tracks.push({
-            name: '自动',
-            pan: '',
-            ext: {
-                url: m3u8Prefix + uuid + m3u8Suffix,
             }
+        }
+
+        // 3. 最后添加“自动”选项 (主索引)
+        tracks.push({
+            name: '自动 (Auto)',
+            pan: '',
+            ext: { url: masterM3u8Url }
         })
     }
 
+    // 如果 tracks 依然为空，可能是正则失效或页面结构大改
     return jsonify({
-        list: [
-            {
-                title: '默认分组',
-                tracks,
-            },
-        ],
+        list: [{
+            title: '清晰度选择',
+            tracks: tracks.length > 0 ? tracks : [{ name: '解析失败', ext: { url: '' } }],
+        }],
     })
 }
 
