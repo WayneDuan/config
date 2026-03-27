@@ -35,45 +35,10 @@ const appConfig = {
             },
         },
         {
-            name: '新作上市',
-            ui: 1,
-            ext: {
-                id: 'dm509/cn/release',
-            },
-        },
-        {
-            name: '我的收藏',
-            ui: 1,
-            ext: {
-                id: 'saved',
-            },
-        },
-        {
             name: '无码流出',
             ui: 1,
             ext: {
                 id: 'dm561/cn/uncensored-leak',
-            },
-        },
-        {
-            name: 'VR',
-            ui: 1,
-            ext: {
-                id: 'dm2091/cn/genres/VR',
-            },
-        },
-        {
-            name: '今日热门',
-            ui: 1,
-            ext: {
-                id: 'dm242/cn/today-hot',
-            },
-        },
-        {
-            name: '本週热门',
-            ui: 1,
-            ext: {
-                id: 'dm168/cn/weekly-hot',
             },
         },
         {
@@ -83,60 +48,13 @@ const appConfig = {
                 id: 'dm207/cn/monthly-hot',
             },
         },
-        {
-            name: 'SIRO',
-            ui: 1,
-            ext: {
-                id: 'dm23/cn/siro',
-            },
-        },
-        {
-            name: 'LUXU',
-            ui: 1,
-            ext: {
-                id: 'dm20/cn/luxu',
-            },
-        },
-        {
-            name: 'GANA',
-            ui: 1,
-            ext: {
-                id: 'dm17/cn/gana',
-            },
-        },
-        {
-            name: 'PRESTIGE PREMIUM',
-            ui: 1,
-            ext: {
-                id: 'dm14/cn/maan',
-            },
-        },
-        {
-            name: 'S-CUTE',
-            ui: 1,
-            ext: {
-                id: 'dm23/cn/scute',
-            },
-        },
-        {
-            name: 'ARA',
-            ui: 1,
-            ext: {
-                id: 'dm19/cn/ara',
-            },
-        },
+       
+       
         {
             name: 'FC2',
             ui: 1,
             ext: {
                 id: 'dm95/cn/fc2',
-            },
-        },
-        {
-            name: 'HEYZO',
-            ui: 1,
-            ext: {
-                id: 'dm628/cn/heyzo',
             },
         },
         {
@@ -154,89 +72,13 @@ const appConfig = {
             },
         },
         {
-            name: 'Caribbeancom',
-            ui: 1,
-            ext: {
-                id: 'dm124158/cn/caribbeancom',
-            },
-        },
-        {
-            name: 'Caribbeancompr',
-            ui: 1,
-            ext: {
-                id: 'dm1442/cn/caribbeancompr',
-            },
-        },
-        {
-            name: '10musume',
-            ui: 1,
-            ext: {
-                id: 'dm58632/cn/10musume',
-            },
-        },
-        {
-            name: 'pacopacomama',
-            ui: 1,
-            ext: {
-                id: 'dm668/cn/pacopacomama',
-            },
-        },
-        {
-            name: 'Gachinco',
-            ui: 1,
-            ext: {
-                id: 'dm135/cn/gachinco',
-            },
-        },
-        {
-            name: 'XXX-AV',
-            ui: 1,
-            ext: {
-                id: 'dm26/cn/xxxav',
-            },
-        },
-        {
-            name: '人妻斩',
-            ui: 1,
-            ext: {
-                id: 'dm24/cn/marriedslash',
-            },
-        },
-        {
-            name: '顽皮 4610',
-            ui: 1,
-            ext: {
-                id: 'dm19/cn/naughty4610',
-            },
-        },
-        {
-            name: '顽皮 0930',
-            ui: 1,
-            ext: {
-                id: 'dm22/cn/naughty0930',
-            },
-        },
-        {
             name: '麻豆传媒',
             ui: 1,
             ext: {
                 id: 'dm34/cn/madou',
             },
         },
-        {
-            name: 'TWAV AV',
-            ui: 1,
-            ext: {
-                id: 'dm17/cn/twav',
-            },
-        },
-        {
-            name: 'Furuke AV',
-            ui: 1,
-            ext: {
-                id: 'dm15/cn/furuke',
-            },
-        },
+        
     ],
 }
 
@@ -389,40 +231,68 @@ async function getTracks(ext) {
     ext = argsify(ext)
     let url = ext.url
     let m3u8Prefix = 'https://surrit.com/'
-    let m3u8Suffix = '/playlist.m3u8'
     let tracks = []
 
     const { data } = await $fetch.get(url, {
         headers: {
             'User-Agent': UA,
-            'Referer':'https://missav.ai/'
+            'Referer': 'https://missav.ai/'
         },
     })
+
+    // 1. 提取 UUID (兼容旧的 nineyu 和新的正则)
+    let uuid = ''
     const match = data.match(/nineyu\.com\\\/(.+)\\\/seek\\\/_0\.jpg/)
     if (match && match[1]) {
-        let uuid = match[1]
-        const { data: data1 } = await $fetch.get(m3u8Prefix + uuid + m3u8Suffix, {
+        uuid = match[1]
+    } else {
+        // 如果上面那个失效了，尝试匹配标准的 UUID 格式
+        const uuidMatch = data.match(/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/)
+        if (uuidMatch) uuid = uuidMatch[0]
+    }
+
+    if (uuid) {
+        const masterM3u8 = `${m3u8Prefix}${uuid}/playlist.m3u8`
+        // 关键：请求主列表时必须带上 Referer
+        const { data: masterData } = await $fetch.get(masterM3u8, {
             headers: {
                 'User-Agent': UA,
+                'Referer': 'https://missav.ai/'
             }
         })
-        const lines = data1.split('\n');
-        const matches = lines.filter(line => line.includes('/video.m3u8'));
-        matches.forEach(match => {
-            const name = match.replace('/video.m3u8', '')
-            tracks.unshift({
-                name: name,
-                pan: '',
-                ext: {
-                    url: `${m3u8Prefix}${uuid}/${match}`,
+
+        if (masterData && masterData.includes('#EXTM3U')) {
+            const lines = masterData.split('\n')
+            lines.forEach((line, index) => {
+                line = line.trim()
+                // 查找包含 video.m3u8 的行
+                if (line.includes('video.m3u8')) {
+                    let label = '未知'
+                    // 向上找一行获取分辨率信息
+                    const prevLine = lines[index - 1] || ''
+                    const resMatch = prevLine.match(/RESOLUTION=\d+x(\d+)/)
+                    if (resMatch) {
+                        label = resMatch[1] + 'P'
+                    } else {
+                        label = line.split('/')[0].toUpperCase() // 回退方案：取目录名 720P
+                    }
+
+                    tracks.push({
+                        name: label,
+                        ext: {
+                            // 拼接完整地址
+                            url: `${m3u8Prefix}${uuid}/${line}`
+                        }
+                    })
                 }
             })
-        })
+        }
+
+        // 始终添加一个“自动”选项放在最后
         tracks.push({
-            name: '自动',
-            pan: '',
+            name: '自动 (Auto)',
             ext: {
-                url: m3u8Prefix + uuid + m3u8Suffix,
+                url: masterM3u8
             }
         })
     }
@@ -430,8 +300,8 @@ async function getTracks(ext) {
     return jsonify({
         list: [
             {
-                title: '默认分组',
-                tracks,
+                title: '清晰度选择',
+                tracks: tracks,
             },
         ],
     })
