@@ -152,80 +152,72 @@ async function getTracks(ext) {
     let tracks = []
 
     const { data } = await $fetch.get(url, {
-        headers: {
-            'User-Agent': UA,
-        },
+        headers: { 'User-Agent': UA }
     })
 
-    // 1. 尝试匹配所有包含 m3u8 的 URL (处理了混淆和转义斜杠)
-    // 现在的源码中通常隐藏在 window.playerConfig 或类似变量里
-    const m3u8Regex = /https?[:\/\w\.-]+\.m3u8/g
-    const matches = data.replace(/\\/g, '').match(m3u8Regex)
-
-    if (matches && matches.length > 0) {
-        // 取第一个匹配到的作为 Master Playlist (主索引)
-        const masterUrl = matches[0]
-        
-        // 获取 UUID 或 基础路径 (用于拼接子链接)
-        // 例如从 https://surrit.com/uuid/playlist.m3u8 提取前缀
-        const baseUrl = masterUrl.substring(0, masterUrl.lastIndexOf('/'))
+    // 1. 尝试直接匹配 36 位 UUID (8-4-4-4-12 格式)
+    // 这种格式在源码中通常出现在 poster 或播放器配置中
+    const uuidRegex = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/
+    const uuidMatch = data.match(uuidRegex)
+    
+    if (uuidMatch) {
+        const uuid = uuidMatch[0]
+        const m3u8Prefix = `https://surrit.com/${uuid}`
+        const masterUrl = `${m3u8Prefix}/playlist.m3u8`
 
         try {
-            // 2. 请求主索引文件以获取具体清晰度
+            // 2. 抓取主索引文件
             const { data: m3u8Content } = await $fetch.get(masterUrl, {
                 headers: { 'User-Agent': UA }
             })
 
+            // 3. 解析具体清晰度 (720p, 1080p 等)
             const lines = m3u8Content.split('\n')
             lines.forEach((line, index) => {
                 line = line.trim()
-                // 查找包含具体分辨率的行 (如 720p/video.m3u8)
-                if (line.endsWith('.m3u8') && !line.includes('playlist.m3u8')) {
+                if (line.includes('.m3u8') && !line.includes('playlist.m3u8')) {
+                    // 提取分辨率数值作为名字
                     let label = '未知'
                     const prevLine = lines[index - 1] || ''
+                    const resMatch = prevLine.match(/RESOLUTION=\d+x(\d+)/)
                     
-                    // 从前一行提取分辨率信息
-                    if (prevLine.includes('RESOLUTION=')) {
-                        const res = prevLine.match(/RESOLUTION=\d+x(\d+)/)
-                        label = res ? res[1] + 'P' : '高清'
-                    } else {
-                        label = line.split('/')[0] || '视频'
+                    if (resMatch) {
+                        label = resMatch[1] + 'P'
+                    } else if (line.includes('/')) {
+                        // 如果没有标签，取路径前缀作为名字 (例如 720p/video.m3u8 -> 720p)
+                        label = line.split('/')[0].toUpperCase()
                     }
 
                     tracks.push({
                         name: label,
                         ext: {
-                            url: line.startsWith('http') ? line : `${baseUrl}/${line}`
+                            url: line.startsWith('http') ? line : `${m3u8Prefix}/${line}`
                         }
                     })
                 }
             })
         } catch (e) {
-            // 如果请求子索引失败，至少保留一个自动选项
+            // 解析子清晰度失败不报错，后面会补一个自动
         }
 
-        // 3. 始终添加一个自动选项 (即使子索引解析失败)
+        // 4. 补全“自动”选项
         tracks.push({
             name: '自动 (Auto)',
             ext: { url: masterUrl }
         })
     }
 
-    // 如果还是没找到，说明可能遇到了五秒盾或页面结构大改
+    // 5. 如果上面还是没抓到，尝试最后的“降级方案”：直接搜源码里所有的 m3u8
     if (tracks.length === 0) {
-        if (data.includes('Just a moment...') || data.includes('cloudflare')) {
-            $utils.openSafari(url, UA)
-            $utils.toastError('请在弹出浏览器中完成人机验证')
+        const anyM3u8 = data.match(/https?[^\s"']+?\.m3u8/g)
+        if (anyM3u8) {
+            const rawUrl = anyM3u8[0].replace(/\\/g, '')
+            tracks.push({ name: '基础线路', ext: { url: rawUrl } })
         }
     }
 
     return jsonify({
-        list: [
-            {
-                title: '切换清晰度',
-                tracks: tracks,
-            },
-        ],
+        list: [{ title: '清晰度选择', tracks }]
     })
 }
 
