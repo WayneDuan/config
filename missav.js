@@ -145,7 +145,6 @@ async function getCards(ext) {
         list: cards,
     })
 }
-
 async function getTracks(ext) {
     ext = argsify(ext)
     let url = ext.url
@@ -153,59 +152,53 @@ async function getTracks(ext) {
     let tracks = []
 
     const { data } = await $fetch.get(url, {
-        headers: { 'User-Agent': UA },
+        headers: { 'User-Agent': UA }
     })
 
-    // 1. 提取 UUID
-    const match = data.match(/nineyu\.com\\\/(.+)\\\/seek\\\/_0\.jpg/)
-    if (match && match[1]) {
-        let uuid = match[1]
-        const masterM3u8Url = `${m3u8Prefix}${uuid}/playlist.m3u8`
-        
-        const { data: m3u8Content } = await $fetch.get(masterM3u8Url, {
+    // 尝试从页面源码直接提取完整的 playlist 链接
+    // 现在的网站经常把链接藏在 JSON.parse 或者 window.config 里
+    const masterMatch = data.match(/https?:\/\/[^\s"'`]+\/playlist\.m3u8/)
+    if (masterMatch) {
+        const masterUrl = masterMatch[0].replace(/\\/g, '') // 去掉转义斜杠
+        const uuid = masterUrl.split('/')[3] // 提取 UUID
+
+        const { data: m3u8Content } = await $fetch.get(masterUrl, {
             headers: { 'User-Agent': UA }
         })
 
-        // 2. 解析不同分辨率的子 m3u8
-        // 匹配格式通常为: #EXT-X-STREAM-INF:BANDWIDTH=...,RESOLUTION=1280x720\n(filename)/video.m3u8
         const lines = m3u8Content.split('\n')
-        
-        for (let i = 0; i < lines.length; i++) {
-            let line = lines[i].trim()
-            if (line.includes('RESOLUTION=')) {
-                // 获取分辨率文字，例如 "1280x720"
-                let resMatch = line.match(/RESOLUTION=(\d+x\d+)/)
-                let resolution = resMatch ? resMatch[1] : 'Unknown'
-                
-                // 下一行通常是对应的 URL 路径
-                let nextLine = lines[i + 1] ? lines[i + 1].trim() : ''
-                if (nextLine && nextLine.endsWith('.m3u8')) {
-                    // 如果路径是相对的（不含 http），则手动拼接
-                    let finalUrl = nextLine.startsWith('http') ? nextLine : `${m3u8Prefix}${uuid}/${nextLine}`
-                    
-                    tracks.push({
-                        name: resolution,
-                        pan: '',
-                        ext: { url: finalUrl }
-                    })
+        lines.forEach((line, index) => {
+            line = line.trim()
+            // 如果这一行是地址且包含 m3u8
+            if (line.endsWith('.m3u8') && !line.includes('playlist.m3u8')) {
+                // 尝试从上一行拿分辨率信息
+                let label = '未知清晰度'
+                const prevLine = lines[index - 1] || ''
+                if (prevLine.includes('RESOLUTION=')) {
+                    label = prevLine.split('RESOLUTION=')[1].split(',')[0].split('x')[1] + 'P'
+                } else {
+                    // 如果没标签，就取文件名作为名字
+                    label = line.replace('/video.m3u8', '').split('/').pop()
                 }
-            }
-        }
 
-        // 3. 最后添加“自动”选项 (主索引)
+                tracks.push({
+                    name: label,
+                    ext: {
+                        url: line.startsWith('http') ? line : `${m3u8Prefix}${uuid}/${line}`
+                    }
+                })
+            }
+        })
+
+        // 始终添加一个自动选项
         tracks.push({
             name: '自动 (Auto)',
-            pan: '',
-            ext: { url: masterM3u8Url }
+            ext: { url: masterUrl }
         })
     }
 
-    // 如果 tracks 依然为空，可能是正则失效或页面结构大改
     return jsonify({
-        list: [{
-            title: '清晰度选择',
-            tracks: tracks.length > 0 ? tracks : [{ name: '解析失败', ext: { url: '' } }],
-        }],
+        list: [{ title: '播放列表', tracks }]
     })
 }
 
