@@ -1,4 +1,12 @@
-const UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/604.1.14 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1'
+async function getLocalInfo() {
+  const appConfig = {
+    ver: 1,
+    name: "玩偶哥哥(本地)",
+    api: "csp_wogg_local",
+  }
+  return jsonify(appConfig)
+}
+const UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/604.1.14 (KHTML, like Gecko)'
 const cheerio = createCheerio()
 /*
 {	
@@ -13,41 +21,222 @@ const appConfig = {
     site: 'https://missav.ai',
     tabs: [
         {
-            name: 'FC2发布时间',
+            name: '中文字幕',
             ui: 1,
             ext: {
-                id: 'dm150/cn/fc2?sort=published_at',
+                id: 'dm265/cn/chinese-subtitle',
             },
-        },    
+        },
         {
-            name: '口',
+            name: '最近更新',
             ui: 1,
             ext: {
-                id: 'cn/tags/口交?sort=published_at',
+                id: 'dm513/cn/new',
             },
-        },  
+        },
         {
-            name: '无码最近更新',
+            name: '新作上市',
             ui: 1,
             ext: {
-                id: 'dm628/cn/uncensored-leak?sort=published_at',
+                id: 'dm509/cn/release',
             },
-        },   
+        },
         {
-            name: '无码周榜',
+            name: '我的收藏',
             ui: 1,
             ext: {
-                id: 'dm628/cn/uncensored-leak?sort=weekly_views',
+                id: 'saved',
+            },
+        },
+        {
+            name: '无码流出',
+            ui: 1,
+            ext: {
+                id: 'dm561/cn/uncensored-leak',
+            },
+        },
+        {
+            name: 'VR',
+            ui: 1,
+            ext: {
+                id: 'dm2091/cn/genres/VR',
+            },
+        },
+        {
+            name: '今日热门',
+            ui: 1,
+            ext: {
+                id: 'dm242/cn/today-hot',
+            },
+        },
+        {
+            name: '本週热门',
+            ui: 1,
+            ext: {
+                id: 'dm168/cn/weekly-hot',
+            },
+        },
+        {
+            name: '本月热门',
+            ui: 1,
+            ext: {
+                id: 'dm207/cn/monthly-hot',
+            },
+        },
+        {
+            name: 'SIRO',
+            ui: 1,
+            ext: {
+                id: 'dm23/cn/siro',
+            },
+        },
+        {
+            name: 'LUXU',
+            ui: 1,
+            ext: {
+                id: 'dm20/cn/luxu',
+            },
+        },
+        {
+            name: 'GANA',
+            ui: 1,
+            ext: {
+                id: 'dm17/cn/gana',
+            },
+        },
+        {
+            name: 'PRESTIGE PREMIUM',
+            ui: 1,
+            ext: {
+                id: 'dm14/cn/maan',
+            },
+        },
+        {
+            name: 'S-CUTE',
+            ui: 1,
+            ext: {
+                id: 'dm23/cn/scute',
+            },
+        },
+        {
+            name: 'ARA',
+            ui: 1,
+            ext: {
+                id: 'dm19/cn/ara',
+            },
+        },
+        {
+            name: 'FC2',
+            ui: 1,
+            ext: {
+                id: 'dm95/cn/fc2',
+            },
+        },
+        {
+            name: 'HEYZO',
+            ui: 1,
+            ext: {
+                id: 'dm628/cn/heyzo',
+            },
+        },
+        {
+            name: '东京热',
+            ui: 1,
+            ext: {
+                id: 'dm29/cn/tokyohot',
+            },
+        },
+        {
+            name: '一本道',
+            ui: 1,
+            ext: {
+                id: 'dm58345/cn/1pondo',
+            },
+        },
+        {
+            name: 'Caribbeancom',
+            ui: 1,
+            ext: {
+                id: 'dm124158/cn/caribbeancom',
+            },
+        },
+        {
+            name: 'Caribbeancompr',
+            ui: 1,
+            ext: {
+                id: 'dm1442/cn/caribbeancompr',
+            },
+        },
+        {
+            name: '10musume',
+            ui: 1,
+            ext: {
+                id: 'dm58632/cn/10musume',
+            },
+        },
+        {
+            name: 'pacopacomama',
+            ui: 1,
+            ext: {
+                id: 'dm668/cn/pacopacomama',
+            },
+        },
+        {
+            name: 'Gachinco',
+            ui: 1,
+            ext: {
+                id: 'dm135/cn/gachinco',
+            },
+        },
+        {
+            name: 'XXX-AV',
+            ui: 1,
+            ext: {
+                id: 'dm26/cn/xxxav',
+            },
+        },
+        {
+            name: '人妻斩',
+            ui: 1,
+            ext: {
+                id: 'dm24/cn/marriedslash',
+            },
+        },
+        {
+            name: '顽皮 4610',
+            ui: 1,
+            ext: {
+                id: 'dm19/cn/naughty4610',
+            },
+        },
+        {
+            name: '顽皮 0930',
+            ui: 1,
+            ext: {
+                id: 'dm22/cn/naughty0930',
             },
         },
         {
             name: '麻豆传媒',
             ui: 1,
             ext: {
-                id: 'dm35/cn/madou?sort=published_at',
+                id: 'dm34/cn/madou',
             },
         },
-       
+        {
+            name: 'TWAV AV',
+            ui: 1,
+            ext: {
+                id: 'dm17/cn/twav',
+            },
+        },
+        {
+            name: 'Furuke AV',
+            ui: 1,
+            ext: {
+                id: 'dm15/cn/furuke',
+            },
+        },
     ],
 }
 
@@ -95,174 +284,173 @@ async function getConfig() {
     return jsonify(config)
 }
 
+
 async function getCards(ext) {
     ext = argsify(ext)
     let cards = []
-    let { page = 1, id } = ext
+    let { page = 1, id, filters = {} } = ext
+
     if (id == 'saved' && $config.length == 0) {
-        return jsonify({
-            list: [],
-        })
+        return jsonify({ list: [] })
     }
 
-    const url = appConfig.site + `/${id}&page=${page}`
+    let url = appConfig.site + `/${id}?page=${page}`
+    
+    if (filters.filters && filters.filters !== '') {
+        url += `&filters=${encodeURIComponent(filters.filters)}`
+    }
+    
+    if (filters.sort && filters.sort !== '') {
+        url += `&sort=${encodeURIComponent(filters.sort)}`
+    } else {
+        url += `&sort=released_at`  
+    }
+    
+    if (filters.keyword) {
+        url += `&keyword=${encodeURIComponent(filters.keyword)}`
+    }
+    
+    if (filters.actress) {
+        url += `&actress=${encodeURIComponent(filters.actress)}`
+    }
+    
+    if (filters.tag) {
+        url += `&tag=${encodeURIComponent(filters.tag)}`
+    }
+
+    console.log('Requesting:', url)
 
     const { data } = await $fetch.get(url, {
         headers: {
             'User-Agent': UA,
         },
     })
+    
     if (data.includes('Just a moment...')) {
         $utils.openSafari(url, UA)
     }
 
-    const $ = cheerio.load(data)
-
-    const videos = $('.thumbnail')
-
-    videos.each((_, e) => {
-        const href = $(e).find('.text-secondary').attr('href')
-        const title = $(e).find('.text-secondary').text().trim().replace(/\s+/g, ' ')
-        const cover = $(e).find('.w-full').attr('data-src')
-        const remarks = $(e).find('.left-1').text().trim()
-        const duration = $(e).find('.right-1').text().trim()
-        let obj = {
-            vod_id: href,
-            vod_name: title,
-            vod_pic: cover,
-            vod_remarks: remarks,
-            vod_duration: duration,
-
-            ext: {
-                url: href,
-            },
-        }
-
+   const $ = cheerio.load(data)
+   
+   const videos = $('.thumbnail')
+   
+   videos.each((_, e) => {
+       const href = $(e).find('.text-secondary').attr('href')
+       const title = $(e).find('.text-secondary').text().trim().replace(/\s+/g, ' ')
+       const cover = $(e).find('.w-full').attr('data-src')
+       const remarks = $(e).find('.left-1').text().trim()
+       const duration = $(e).find('.right-1').text().trim()
+       let obj = {
+           vod_id: href,
+           vod_name: title,
+           vod_pic: cover,
+           vod_remarks: remarks,
+           vod_duration: duration,
+   
+           ext: {
+               url: href,
+           },
+       }
         cards.push(obj)
     })
 
     return jsonify({
         list: cards,
+        filter: [
+            {
+                key: 'filters',  
+                name: '过滤',
+                init: '',      
+                value: [
+                    { n: '所有', v: '' },
+                    { n: '单人作品', v: 'individual' },
+                    { n: '多人作品', v: 'multiple' },
+                    { n: '中文字幕', v: 'chinese-subtitle' },
+                ],
+            },
+            {
+                key: 'sort',    
+                name: '排序',
+                init: 'released_at',  
+                value: [
+                    { n: '发行日期', v: 'released_at' },
+                    { n: '最近更新', v: 'published_at' },
+                    { n: '收藏数', v: 'saved' },
+                    { n: '今日浏览数', v: 'today_views' },
+                    { n: '本週浏览数', v: 'weekly_views' },
+                    { n: '本月浏览数', v: 'monthly_views' },
+                    { n: '总浏览数', v: 'views' },
+                ],
+            },
+        ],
     })
 }
-
 async function getTracks(ext) {
-    ext = argsify(ext);
-    let url = ext.url;
-    let tracks = [];
+    ext = argsify(ext)
+    let url = ext.url
+    let m3u8Prefix = 'https://surrit.com/'
+    let m3u8Suffix = '/playlist.m3u8'
+    let tracks = []
 
     const { data } = await $fetch.get(url, {
         headers: {
             'User-Agent': UA,
-            'Referer': appConfig.site,
         },
-    });
-
-    // 1. 提取 UUID (MissAV 现在的核心 ID 格式)
-    // 尝试从不同的位置抓取 UUID
-    let uuid = "";
-    const uuidMatch = data.match(/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/);
-    if (uuidMatch) {
-        uuid = uuidMatch[0];
-    } else {
-        // 备选方案：从 poster 路径里截取
-        const posterMatch = data.match(/https?%3A%2F%2Fsurrit\.com%2F([a-z0-9\-]+)%2F/);
-        if (posterMatch) uuid = posterMatch[1];
-    }
-
-    if (uuid) {
-        const m3u8Prefix = `https://surrit.com/${uuid}`;
-        const masterUrl = `${m3u8Prefix}/playlist.m3u8`;
-
-        // 关键点：给 URL 加上 Referer 标记，很多播放器插件识别这个格式
-        const headerSuffix = `#Referer=${appConfig.site}&Origin=${appConfig.site}`;
-
-        try {
-            // 2. 获取主索引内容
-            const { data: m3u8Content } = await $fetch.get(masterUrl, {
-                headers: { 
-                    'User-Agent': UA,
-                    'Referer': appConfig.site
-                }
-            });
-
-            const lines = m3u8Content.split('\n');
-            lines.forEach((line, index) => {
-                line = line.trim();
-                if (line.endsWith('.m3u8') && !line.includes('playlist.m3u8')) {
-                    let label = '未知清晰度';
-                    const prevLine = lines[index - 1] || '';
-                    const resMatch = prevLine.match(/RESOLUTION=\d+x(\d+)/);
-                    
-                    if (resMatch) {
-                        label = resMatch[1] + 'P';
-                    } else {
-                        label = line.split('/')[0].toUpperCase();
-                    }
-
-                    tracks.push({
-                        name: label,
-                        ext: {
-                            // 将 Header 注入 URL
-                            url: (line.startsWith('http') ? line : `${m3u8Prefix}/${line}`) + headerSuffix
-                        }
-                    });
-                }
-            });
-        } catch (e) {
-            // 如果主索引请求失败，可能是节点问题
-        }
-
-        // 3. 始终添加一个自动选项
-        tracks.push({
-            name: '自动 (Auto)',
-            ext: { 
-                url: masterUrl + headerSuffix 
+    })
+    const match = data.match(/nineyu\.com\\\/(.+)\\\/seek\\\/_0\.jpg/)
+    if (match && match[1]) {
+        let uuid = match[1]
+        const { data: data1 } = await $fetch.get(m3u8Prefix + uuid + m3u8Suffix, {
+            headers: {
+                'User-Agent': UA,
             }
-        });
-    }
-
-    // 4. 彻底的降级方案：全文本搜索任何 m3u8
-    if (tracks.length === 0) {
-        const cleanData = data.replace(/\\/g, '');
-        const allM3u8 = cleanData.match(/https?:\/\/[\w\.\/\-]+\.m3u8/g);
-        if (allM3u8) {
-            allM3u8.forEach((link, i) => {
-                if (!link.includes('playlist.m3u8')) {
-                    tracks.push({
-                        name: `备用线路 ${i+1}`,
-                        ext: { url: link + `#Referer=${appConfig.site}` }
-                    });
+        })
+        const lines = data1.split('\n');
+        const matches = lines.filter(line => line.includes('/video.m3u8'));
+        matches.forEach(match => {
+            const name = match.replace('/video.m3u8', '')
+            tracks.unshift({
+                name: name,
+                pan: '',
+                ext: {
+                    url: `${m3u8Prefix}${uuid}/${match}`,
                 }
-            });
-        }
+            })
+        })
+        tracks.push({
+            name: '自动',
+            pan: '',
+            ext: {
+                url: m3u8Prefix + uuid + m3u8Suffix,
+            }
+        })
     }
 
     return jsonify({
-        list: [{
-            title: '请选择清晰度 (若无法播放请重试)',
-            tracks: tracks,
-        }],
-    });
+        list: [
+            {
+                title: '默认分组',
+                tracks,
+            },
+        ],
+    })
 }
 
 async function getPlayinfo(ext) {
     ext = argsify(ext)
     const url = ext.url
 
-    return jsonify({ urls: [url],headers: {
-            'User-Agent': UA,
-            'Referer': 'https://missav.ai/'
-        }})
+    return jsonify({ urls: [url] })
 }
 
 async function search(ext) {
     ext = argsify(ext)
     let cards = []
 
-    //let text = encodeURIComponent(ext.text)
+    let text = encodeURIComponent(ext.text)
     let page = ext.page || 1
-    let url = appConfig.site + `/cn/search/${ext.text}?page=${page}`
+    let url = `${appConfig.site}/cn/search/${text}?page=${page}`
+
     const { data } = await $fetch.get(url, {
         headers: {
             'User-Agent': UA,
