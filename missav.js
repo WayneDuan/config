@@ -395,6 +395,7 @@ async function getTracks(ext) {
     const { data } = await $fetch.get(url, {
         headers: {
             'User-Agent': UA,
+            'Referer':'https://missav.ai/'
         },
     })
     const match = data.match(/nineyu\.com\\\/(.+)\\\/seek\\\/_0\.jpg/)
