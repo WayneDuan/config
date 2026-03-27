@@ -147,85 +147,113 @@ async function getCards(ext) {
 }
 
 async function getTracks(ext) {
-    ext = argsify(ext)
-    let url = ext.url
-    let tracks = []
+    ext = argsify(ext);
+    let url = ext.url;
+    let tracks = [];
 
     const { data } = await $fetch.get(url, {
-        headers: { 'User-Agent': UA }
-    })
+        headers: {
+            'User-Agent': UA,
+            'Referer': appConfig.site,
+        },
+    });
 
-    // 1. 尝试直接匹配 36 位 UUID (8-4-4-4-12 格式)
-    // 这种格式在源码中通常出现在 poster 或播放器配置中
-    const uuidRegex = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/
-    const uuidMatch = data.match(uuidRegex)
-    
+    // 1. 提取 UUID (MissAV 现在的核心 ID 格式)
+    // 尝试从不同的位置抓取 UUID
+    let uuid = "";
+    const uuidMatch = data.match(/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/);
     if (uuidMatch) {
-        const uuid = uuidMatch[0]
-        const m3u8Prefix = `https://surrit.com/${uuid}`
-        const masterUrl = `${m3u8Prefix}/playlist.m3u8`
+        uuid = uuidMatch[0];
+    } else {
+        // 备选方案：从 poster 路径里截取
+        const posterMatch = data.match(/https?%3A%2F%2Fsurrit\.com%2F([a-z0-9\-]+)%2F/);
+        if (posterMatch) uuid = posterMatch[1];
+    }
+
+    if (uuid) {
+        const m3u8Prefix = `https://surrit.com/${uuid}`;
+        const masterUrl = `${m3u8Prefix}/playlist.m3u8`;
+
+        // 关键点：给 URL 加上 Referer 标记，很多播放器插件识别这个格式
+        const headerSuffix = `#Referer=${appConfig.site}&Origin=${appConfig.site}`;
 
         try {
-            // 2. 抓取主索引文件
+            // 2. 获取主索引内容
             const { data: m3u8Content } = await $fetch.get(masterUrl, {
-                headers: { 'User-Agent': UA }
-            })
+                headers: { 
+                    'User-Agent': UA,
+                    'Referer': appConfig.site
+                }
+            });
 
-            // 3. 解析具体清晰度 (720p, 1080p 等)
-            const lines = m3u8Content.split('\n')
+            const lines = m3u8Content.split('\n');
             lines.forEach((line, index) => {
-                line = line.trim()
-                if (line.includes('.m3u8') && !line.includes('playlist.m3u8')) {
-                    // 提取分辨率数值作为名字
-                    let label = '未知'
-                    const prevLine = lines[index - 1] || ''
-                    const resMatch = prevLine.match(/RESOLUTION=\d+x(\d+)/)
+                line = line.trim();
+                if (line.endsWith('.m3u8') && !line.includes('playlist.m3u8')) {
+                    let label = '未知清晰度';
+                    const prevLine = lines[index - 1] || '';
+                    const resMatch = prevLine.match(/RESOLUTION=\d+x(\d+)/);
                     
                     if (resMatch) {
-                        label = resMatch[1] + 'P'
-                    } else if (line.includes('/')) {
-                        // 如果没有标签，取路径前缀作为名字 (例如 720p/video.m3u8 -> 720p)
-                        label = line.split('/')[0].toUpperCase()
+                        label = resMatch[1] + 'P';
+                    } else {
+                        label = line.split('/')[0].toUpperCase();
                     }
 
                     tracks.push({
                         name: label,
                         ext: {
-                            url: line.startsWith('http') ? line : `${m3u8Prefix}/${line}`
+                            // 将 Header 注入 URL
+                            url: (line.startsWith('http') ? line : `${m3u8Prefix}/${line}`) + headerSuffix
                         }
-                    })
+                    });
                 }
-            })
+            });
         } catch (e) {
-            // 解析子清晰度失败不报错，后面会补一个自动
+            // 如果主索引请求失败，可能是节点问题
         }
 
-        // 4. 补全“自动”选项
+        // 3. 始终添加一个自动选项
         tracks.push({
             name: '自动 (Auto)',
-            ext: { url: masterUrl }
-        })
+            ext: { 
+                url: masterUrl + headerSuffix 
+            }
+        });
     }
 
-    // 5. 如果上面还是没抓到，尝试最后的“降级方案”：直接搜源码里所有的 m3u8
+    // 4. 彻底的降级方案：全文本搜索任何 m3u8
     if (tracks.length === 0) {
-        const anyM3u8 = data.match(/https?[^\s"']+?\.m3u8/g)
-        if (anyM3u8) {
-            const rawUrl = anyM3u8[0].replace(/\\/g, '')
-            tracks.push({ name: '基础线路', ext: { url: rawUrl } })
+        const cleanData = data.replace(/\\/g, '');
+        const allM3u8 = cleanData.match(/https?:\/\/[\w\.\/\-]+\.m3u8/g);
+        if (allM3u8) {
+            allM3u8.forEach((link, i) => {
+                if (!link.includes('playlist.m3u8')) {
+                    tracks.push({
+                        name: `备用线路 ${i+1}`,
+                        ext: { url: link + `#Referer=${appConfig.site}` }
+                    });
+                }
+            });
         }
     }
 
     return jsonify({
-        list: [{ title: '清晰度选择', tracks }]
-    })
+        list: [{
+            title: '请选择清晰度 (若无法播放请重试)',
+            tracks: tracks,
+        }],
+    });
 }
 
 async function getPlayinfo(ext) {
     ext = argsify(ext)
     const url = ext.url
 
-    return jsonify({ urls: [url] })
+    return jsonify({ urls: [url],headers: {
+            'User-Agent': UA,
+            'Referer': 'https://missav.ai/'
+        }})
 }
 
 async function search(ext) {
