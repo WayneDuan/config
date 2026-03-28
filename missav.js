@@ -165,6 +165,7 @@ async function getCards(ext) {
     const { data } = await $fetch.get(url, {
         headers: {
             'User-Agent': UA,
+            'Referer': 'https://missav.ai/'
         },
     })
     
@@ -190,7 +191,7 @@ async function getCards(ext) {
            vod_duration: duration,
    
            ext: {
-               url: href,
+               url: href,          
            },
        }
         cards.push(obj)
@@ -335,6 +336,7 @@ async function search(ext) {
     const { data } = await $fetch.get(url, {
         headers: {
             'User-Agent': UA,
+            'Referer': 'https://missav.ai/'
         },
     })
 
