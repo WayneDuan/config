@@ -191,7 +191,11 @@ async function getCards(ext) {
            vod_duration: duration,
    
            ext: {
-               url: href,          
+               url: href, 
+               headers: {
+                'User-Agent': UA,
+                'Referer': 'https://missav.ai/'
+            }
            },
        }
         cards.push(obj)
