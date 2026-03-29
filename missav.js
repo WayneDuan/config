@@ -24,51 +24,28 @@ const appConfig = {
             name: '中文字幕',
             ui: 1,
             ext: {
-                id: 'dm265/cn/chinese-subtitle',
-            },
-        },
-        {
-            name: '最近更新',
-            ui: 1,
-            ext: {
-                id: 'dm513/cn/new',
+                id: 'dm265/ja/chinese-subtitle',
             },
         },
         {
             name: '无码流出',
             ui: 1,
             ext: {
-                id: 'dm561/cn/uncensored-leak',
+                id: 'dm628/ja/uncensored-leak',
             },
         },
         {
-            name: '本月热门',
+            name: '最近更新',
             ui: 1,
             ext: {
-                id: 'dm207/cn/monthly-hot',
+                id: 'dm515/ja/new',
             },
         },
-       
-       
         {
             name: 'FC2',
             ui: 1,
             ext: {
-                id: 'dm95/cn/fc2',
-            },
-        },
-        {
-            name: '东京热',
-            ui: 1,
-            ext: {
-                id: 'dm29/cn/tokyohot',
-            },
-        },
-        {
-            name: '一本道',
-            ui: 1,
-            ext: {
-                id: 'dm58345/cn/1pondo',
+                id: 'dm150/ja/fc2',
             },
         },
         {
