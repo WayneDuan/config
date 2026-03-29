@@ -141,8 +141,7 @@ async function getCards(ext) {
 
     const { data } = await $fetch.get(url, {
         headers: {
-            'User-Agent': UA,
-            'Referer': 'https://missav.ai/'
+            'User-Agent': UA
         },
     })
     
@@ -170,8 +169,7 @@ async function getCards(ext) {
            ext: {
                url: href, 
                headers: {
-                'User-Agent': UA,
-                'Referer': 'https://missav.ai/'
+                'User-Agent': UA
             }
            },
        }
@@ -316,8 +314,7 @@ async function search(ext) {
 
     const { data } = await $fetch.get(url, {
         headers: {
-            'User-Agent': UA,
-            'Referer': 'https://missav.ai/'
+            'User-Agent': UA
         },
     })
 
