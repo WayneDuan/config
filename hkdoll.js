@@ -3,6 +3,60 @@ const CryptoJS = createCryptoJS();
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 const SITE = 'https://hongkongdollvideo.com';
+const IGNORE_TABS = ['亚洲成人视频'];
+
+let tabsCache = null;
+
+function toAbsoluteUrl(url) {
+  if (!url) return '';
+  return url.startsWith('http') ? url : new URL(url, SITE).toString();
+}
+
+function buildPagedUrl(url, page) {
+  if (!page || page <= 1) return url;
+  const normalized = url.endsWith('/') ? url : `${url}/`;
+  return `${normalized}${page}.html`;
+}
+
+async function getTabs() {
+  const list = [];
+  const seen = new Set();
+
+  const isIgnoreClassName = (className) => {
+    if (!className) return true;
+    return IGNORE_TABS.some((keyword) => className.includes(keyword));
+  };
+
+  try {
+    const { data } = await $fetch.get(SITE, {
+      headers: {
+        'User-Agent': UA,
+      },
+    });
+    const $ = cheerio.load(data);
+
+    $('.scrollbar a').each((_, e) => {
+      const name = ($(e).text() || '').trim();
+      const href = $(e).attr('href');
+      if (!href || isIgnoreClassName(name)) return;
+
+      const url = encodeURI(toAbsoluteUrl(href));
+      if (seen.has(url)) return;
+      seen.add(url);
+
+      list.push({
+        name,
+        ext: {
+          url,
+        },
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  return list;
+}
 
 // 必需：获取网站信息
 async function getWebsiteInfo() {
@@ -14,16 +68,31 @@ async function getWebsiteInfo() {
   };
 }
 
-// 必需：获取视频列表
-async function getVideoList(page) {
-  if (!page) page = 1;
-  let url = SITE + '/'; // 默认取首页内容，或者如果分类页可以自己在这调整
+async function getCategories() {
+  if (tabsCache) return tabsCache;
 
-  if (page > 1) {
-    // 根据原脚本的逻辑，翻页时在 url 后面拼加 page + '.html'
-    // 假设默认使用 /recent/ 等通用分类路由，这里做容错处理，你可以根据实际分类替换为具体频道路径
-    url = url + (url.endsWith('/') ? '' : '/') + page + '.html';
-  }
+  const tabs = await getTabs();
+  tabsCache = tabs.map((tab, index) => ({
+    id: String(index + 1),
+    name: tab.name,
+    ext: tab.ext,
+  }));
+
+  return tabsCache;
+}
+
+async function getVideosByCategory(categoryId, page) {
+  const categories = await getCategories();
+  const category = categories.find((item) => item.id === String(categoryId));
+  const categoryUrl = category && category.ext ? category.ext.url : SITE + '/';
+  return getVideoList(page, categoryUrl);
+}
+
+// 必需：获取视频列表
+async function getVideoList(page, categoryUrl) {
+  if (!page) page = 1;
+  const baseUrl = categoryUrl || SITE + '/';
+  const url = buildPagedUrl(baseUrl, page);
 
   const { data } = await $fetch.get(url, {
     headers: {
@@ -40,12 +109,8 @@ async function getVideoList(page) {
     const title = $(element).find('.thumb a').attr('title');
     const cover = $(element).find('.thumb img').attr('data-src');
     const subTitle = $(element).find('.duratio').text().trim();
-
-    // 格式化 url 为绝对路径
-    let fullHref = href;
-    if (href && !href.startsWith('http')) {
-        fullHref = href.startsWith('/') ? SITE + href : SITE + '/' + href;
-    }
+    const fullHref = toAbsoluteUrl(href);
+    if (!fullHref) return;
 
     list.push({
       id: fullHref,
@@ -131,11 +196,8 @@ async function search(keyword) {
     const title = $(element).find('.thumb a').attr('title');
     const cover = $(element).find('.thumb img').attr('data-src');
     const subTitle = $(element).find('.duratio').text().trim();
-
-    let fullHref = href;
-    if (href && !href.startsWith('http')) {
-        fullHref = href.startsWith('/') ? SITE + href : SITE + '/' + href;
-    }
+    const fullHref = toAbsoluteUrl(href);
+    if (!fullHref) return;
 
     list.push({
       id: fullHref,
@@ -197,4 +259,15 @@ function _0x535536(_0x12d383, _0x391fc7) {
       _0x8ccc83 += String.fromCharCode(_0x386dd5 ^ _0x391fc7.charCodeAt(_0x2de3e5));
   }
   return _0x8ccc83;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    getWebsiteInfo,
+    getVideoList,
+    getVideoDetail,
+    search,
+    getCategories,
+    getVideosByCategory,
+  };
 }
