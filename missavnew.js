@@ -1,7 +1,7 @@
 const UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
 const SITE = 'https://missav.ai';
 const cheerio = createCheerio(); // 假设你的新环境依然支持 createCheerio 和 $fetch
-
+let tabsCache = null;
 // 必需：获取网站信息
 async function getWebsiteInfo() {
   return {
@@ -12,10 +12,38 @@ async function getWebsiteInfo() {
   };
 }
 
+async function getCategories() {
+  if (tabsCache) return tabsCache;
+
+  const tabs = [
+    { name: '中文字幕', ext: { url: SITE + '/dm265/ja/chinese-subtitle' } },
+    { name: '无码流出', ext: { url: SITE + '/dm628/ja/uncensored-leak' } },
+    { name: '最近更新', ext: { url: SITE + '/dm515/ja/new' } },
+    { name: 'FC2', ext: { url: SITE + '/dm150/ja/fc2' } },
+    { name: '麻豆传媒', ext: { url: SITE + '/dm34/cn/madou' } }
+  ];
+
+  tabsCache = tabs.map((tab, index) => ({ 
+    id: String(index + 1),
+    name: tab.name,
+    ext: tab.ext,
+  }));
+
+  return tabsCache;
+}
+
+async function getVideosByCategory(categoryId, page) {
+  const categories = await getCategories();
+  const category = categories.find((item) => item.id === String(categoryId));
+  const categoryUrl = category && category.ext ? category.ext.url : SITE + '/dm515/ja/new';
+  return getVideoList(page, categoryUrl);
+}
+
 // 必需：获取视频列表 (这里默认获取“最近更新”分类，可根据需要调整 URL)
-async function getVideoList(page) {
+async function getVideoList(page, categoryUrl) {
   if (!page) page = 1;
-  const url = `${SITE}/new?page=${page}`;
+  const baseUrl = categoryUrl || `${SITE}/dm515/ja/new`;
+  const url = baseUrl.includes('?') ? `${baseUrl}&page=${page}` : `${baseUrl}?page=${page}`;
     
   const { data } = await $fetch.get(url, {
     headers: {
