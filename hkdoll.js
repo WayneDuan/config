@@ -1,11 +1,29 @@
 const cheerio = createCheerio();
 const CryptoJS = createCryptoJS();
 
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+const UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
 const SITE = 'https://hongkongdollvideo.com';
-const IGNORE_TABS = ['亚洲成人视频'];
+const IGNORE_TABS = ['亚洲成人视频', '中国AV视频'];
 
 let tabsCache = null;
+let sessionReady = false;
+
+const baseHeaders = {
+  'User-Agent': UA,
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'ja-JP,ja;q=0.9,zh-CN;q=0.8,en-US;q=0.7,en;q=0.6',
+  'Referer': SITE + '/',
+  'Origin': SITE,
+  'Sec-Fetch-Site': 'same-origin',
+  'Sec-Fetch-Mode': 'navigate',
+  'Sec-Fetch-Dest': 'document',
+};
+
+async function ensureSession() {
+  if (sessionReady) return;
+  await $fetch.get(SITE + '/', { headers: baseHeaders, userAgent: UA });
+  sessionReady = true;
+}
 
 function toAbsoluteUrl(url) {
   if (!url) return '';
@@ -28,13 +46,14 @@ async function getTabs() {
   const seen = new Set();
 
   const isIgnored = (name) => {
-    if (!name) return false; // 空名不直接过滤，避免误伤
+    if (!name) return false;
     return IGNORE_TABS.some((keyword) => name.includes(keyword));
   };
 
   try {
+    await ensureSession();
     const { data } = await $fetch.get(SITE, {
-      headers: { 'User-Agent': UA },
+      headers: baseHeaders,
       userAgent: UA,
     });
     const $ = cheerio.load(data || '');
@@ -44,13 +63,13 @@ async function getTabs() {
       const href = $(e).attr('href');
       if (!href || isIgnored(name)) return;
 
-      const abs = encodeURI(toAbsoluteUrl(href));
-      if (!abs || seen.has(abs)) return;
-      seen.add(abs);
+      const url = encodeURI(toAbsoluteUrl(href));
+      if (!url || seen.has(url)) return;
+      seen.add(url);
 
       list.push({
         name: name || '未命名分类',
-        ext: { url: abs },
+        ext: { url },
       });
     });
   } catch (error) {
@@ -65,7 +84,7 @@ async function getWebsiteInfo() {
     name: 'hkdoll',
     description: 'HongKongDoll 玩偶姐姐',
     icon: SITE + '/favicon.ico',
-    homepage: SITE
+    homepage: SITE,
   };
 }
 
@@ -90,12 +109,14 @@ async function getVideosByCategory(categoryId, page) {
 }
 
 async function getVideoList(page, categoryUrl) {
-  if (!page) page = 1;
+  await ensureSession();
+
+  const currentPage = page || 1;
   const baseUrl = categoryUrl || SITE + '/';
-  const url = buildPagedUrl(baseUrl, page);
+  const url = buildPagedUrl(baseUrl, currentPage);
 
   const { data } = await $fetch.get(url, {
-    headers: { 'User-Agent': UA },
+    headers: baseHeaders,
     userAgent: UA,
   });
 
@@ -126,23 +147,21 @@ async function getVideoList(page, categoryUrl) {
       cover: toAbsoluteUrl(cover),
       url: fullHref,
       description: `时长: ${subTitle}`,
-      createTime: Date.now()
+      createTime: Date.now(),
     });
   });
 
   return list;
 }
-// 不实现 getSortOptions() 也可以
-// 或者显式返回空（两种方式都行）
-async function getSortOptions() {
-  return null;
-}
+
 async function getVideoDetail(videoId) {
+  await ensureSession();
+
   const url = videoId;
   const { data } = await $fetch.get(url, {
     headers: {
-      'User-Agent': UA,
-      'Referer': SITE + '/'
+      ...baseHeaders,
+      'Referer': SITE + '/',
     },
     userAgent: UA,
   });
@@ -150,9 +169,9 @@ async function getVideoDetail(videoId) {
   const html = data || '';
   const $ = cheerio.load(html);
 
-  let title = $('title').text().trim() || '视频详情';
-  let cover = $('meta[property="og:image"]').attr('content') || '';
-  let description = $('meta[name="description"]').attr('content') || title;
+  const title = $('title').text().trim() || '视频详情';
+  const cover = $('meta[property="og:image"]').attr('content') || '';
+  const description = $('meta[name="description"]').attr('content') || title;
 
   const resolutions = [];
 
@@ -174,7 +193,7 @@ async function getVideoDetail(videoId) {
               id: 'auto',
               name: '自动(Auto)',
               url: playUrl,
-              size: ''
+              size: '',
             });
           }
         }
@@ -189,17 +208,19 @@ async function getVideoDetail(videoId) {
     title,
     cover: toAbsoluteUrl(cover),
     description,
-    resolutions
+    resolutions,
   };
 }
 
 async function search(keyword) {
+  await ensureSession();
+
   const text = encodeURIComponent(keyword || '');
   const page = 1;
   const url = `${SITE}/search/${text}/${page}.html`;
 
   const { data } = await $fetch.get(url, {
-    headers: { 'User-Agent': UA },
+    headers: baseHeaders,
     userAgent: UA,
   });
 
@@ -230,7 +251,7 @@ async function search(keyword) {
       cover: toAbsoluteUrl(cover),
       url: fullHref,
       description: `时长: ${subTitle}`,
-      createTime: Date.now()
+      createTime: Date.now(),
     });
   });
 
