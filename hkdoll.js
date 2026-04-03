@@ -78,7 +78,7 @@ async function getVideoDetail(videoId) {
   let description = title;
   
   let resolutions = [];
-
+ 
   try {
     const param = $('script:contains(__PAGE__PARAMS__)')
         .text()
@@ -93,7 +93,7 @@ async function getVideoDetail(videoId) {
       id: 'auto',
       name: '自动(Auto)',
       url: playUrl,
-      size: "未知"
+      size: ""
     });
   } catch (error) {
     // 解析失败
