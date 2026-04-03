@@ -3,7 +3,7 @@ const CryptoJS = createCryptoJS();
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 const SITE = 'https://hongkongdollvideo.com';
-const IGNORE_TABS = ['亚洲成人视频', '中国AV视频'];
+const IGNORE_TABS = ['亚洲成人视频'];
 
 let tabsCache = null;
 
