@@ -1,6 +1,7 @@
 const UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
 const SITE = 'https://missav.ai';
 const cheerio = createCheerio();
+
 let tabsCache = null;
 let sessionReady = false;
 
@@ -19,6 +20,12 @@ async function ensureSession() {
   if (sessionReady) return;
   await $fetch.get(SITE + '/', { headers: baseHeaders, userAgent: UA });
   sessionReady = true;
+}
+
+function withQuery(url, key, value) {
+  if (!value) return url;
+  const sep = url.includes('?') ? '&' : '?';
+  return `${url}${sep}${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
 }
 
 async function getWebsiteInfo() {
@@ -50,26 +57,50 @@ async function getCategories() {
   return tabsCache;
 }
 
-async function getVideosByCategory(categoryId, page) {
+// 通用排序配置（给 App 渲染 UI 用）
+async function getSortOptions() {
+  return {
+    key: 'sort',
+    name: '排序',
+    init: 'released_at',
+    value: [
+      { n: '发行日期', v: 'released_at' },
+      { n: '最近更新', v: 'published_at' },
+      { n: '收藏数', v: 'saved' },
+      { n: '今日浏览数', v: 'today_views' },
+      { n: '本周浏览数', v: 'weekly_views' },
+      { n: '本月浏览数', v: 'monthly_views' },
+      { n: '总浏览数', v: 'views' },
+    ],
+  };
+}
+
+// 注意：只保留这一个 getVideosByCategory，支持 sort
+async function getVideosByCategory(categoryId, page, sort) {
   const categories = await getCategories();
   const category = categories.find((item) => item.id === String(categoryId));
   const categoryUrl = category && category.ext ? category.ext.url : SITE + '/dm515/ja/new';
-  return getVideoList(page, categoryUrl);
+  return getVideoList(page, categoryUrl, sort);
 }
 
-async function getVideoList(page, categoryUrl) {
+// 列表支持 sort
+async function getVideoList(page, categoryUrl, sort) {
   await ensureSession();
 
-  if (!page) page = 1;
-  const baseUrl = categoryUrl || `${SITE}/dm515/ja/new`;
-  const url = baseUrl.includes('?') ? `${baseUrl}&page=${page}` : `${baseUrl}?page=${page}`;
+  const currentPage = page || 1;
+  const sortValue = sort || 'released_at';
+
+  let baseUrl = categoryUrl || `${SITE}/dm515/ja/new`;
+  baseUrl = withQuery(baseUrl, 'sort', sortValue);
+
+  const url = baseUrl.includes('?') ? `${baseUrl}&page=${currentPage}` : `${baseUrl}?page=${currentPage}`;
 
   const { data } = await $fetch.get(url, {
     headers: baseHeaders,
     userAgent: UA
   });
 
-  const $ = cheerio.load(data);
+  const $ = cheerio.load(data || '');
   const videos = $('.thumbnail');
   let list = [];
 
@@ -80,10 +111,12 @@ async function getVideoList(page, categoryUrl) {
     const remarks = $(e).find('.left-1').text().trim();
     const duration = $(e).find('.right-1').text().trim();
 
+    if (!href) return;
+
     list.push({
       id: href,
-      title: title,
-      cover: cover,
+      title: title || '未知标题',
+      cover: cover || '',
       url: href,
       description: `状态: ${remarks} | 时长: ${duration}`,
       createTime: Date.now()
@@ -104,19 +137,20 @@ async function getVideoDetail(videoId) {
     userAgent: UA
   });
 
-  const $ = cheerio.load(data);
+  const html = data || '';
+  const $ = cheerio.load(html);
   const title = $('h1.text-base').text().trim().replace(/\s+/g, ' ') || '视频标题';
   const cover = $('video').attr('poster') || '';
   const description = $('meta[name="description"]').attr('content') || '';
 
   let resolutions = [];
-
   let uuid = '';
-  const match = data.match(/nineyu\.com\\\/([a-zA-Z0-9-]+)\\\/seek\\\/_0\.jpg/);
+
+  const match = html.match(/nineyu\.com\\\/([a-zA-Z0-9-]+)\\\/seek\\\/_0\.jpg/);
   if (match && match[1]) {
     uuid = match[1];
   } else {
-    const uuidMatch = data.match(/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/);
+    const uuidMatch = html.match(/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/);
     if (uuidMatch) uuid = uuidMatch[0];
   }
 
@@ -130,32 +164,28 @@ async function getVideoDetail(videoId) {
     if (masterData && masterData.includes('#EXTM3U')) {
       const lines = masterData.split('\n');
       lines.forEach((line, index) => {
-        line = line.trim();
-        if (line.includes('video.m3u8')) {
+        const current = line.trim();
+        if (current.includes('video.m3u8')) {
           let label = '未知';
-          const prevLine = lines[index - 1] || '';
+          const prevLine = (lines[index - 1] || '').trim();
           const resMatch = prevLine.match(/RESOLUTION=\d+x(\d+)/);
 
           if (resMatch) {
             label = resMatch[1] + 'p';
           } else {
-            label = line.split('/')[0].toLowerCase();
+            label = current.split('/')[0].toLowerCase();
           }
 
           resolutions.push({
             id: label,
             name: label.toUpperCase(),
-            url: `${m3u8Prefix}${uuid}/${line}`,
+            url: `${m3u8Prefix}${uuid}/${current}`,
             size: "未知"
           });
         }
       });
 
-      resolutions.sort((a, b) => {
-        let valA = parseInt(a.name) || 0;
-        let valB = parseInt(b.name) || 0;
-        return valB - valA;
-      });
+      resolutions.sort((a, b) => (parseInt(b.name) || 0) - (parseInt(a.name) || 0));
     }
 
     resolutions.unshift({
@@ -186,7 +216,7 @@ async function search(keyword) {
     userAgent: UA
   });
 
-  const $ = cheerio.load(data);
+  const $ = cheerio.load(data || '');
   const videos = $('.thumbnail');
   let list = [];
 
@@ -197,10 +227,12 @@ async function search(keyword) {
     const remarks = $(e).find('.left-1').text().trim();
     const duration = $(e).find('.right-1').text().trim();
 
+    if (!href) return;
+
     list.push({
       id: href,
-      title: title,
-      cover: cover,
+      title: title || '未知标题',
+      cover: cover || '',
       url: href,
       description: `状态: ${remarks} | 时长: ${duration}`,
       createTime: Date.now()
