@@ -1,0 +1,197 @@
+{
+  "id": "wayne_app_sub_001",
+  "name": "Wayne的福利订阅",
+  "description": "从XPTV AV订阅源转换而来的应用订阅集合",
+  "updateTime": "2026-04-03T12:57:18.145Z",
+  "websites": [
+    {
+      "id": "site_1_missav",
+      "name": "MISSAV",
+      "icon": "https://missav.ai/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/miss.js",
+      "description": "从源 csp_miss 获取的影视站点: MISSAV"
+    },
+    {
+      "id": "site_2_exporntoons",
+      "name": "EXPORNTOONS",
+      "icon": "https://exporntoons.net/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/exporntoons.js",
+      "description": "从源 csp_EXPORNTOONS 获取的影视站点: EXPORNTOONS"
+    },
+    {
+      "id": "site_3_spankbang",
+      "name": "SpankBang",
+      "icon": "https://jp.spankbang.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/spankbang.js",
+      "description": "从源 csp_SpankBang 获取的影视站点: SpankBang"
+    },
+    {
+      "id": "site_4_",
+      "name": "麻豆社",
+      "icon": "https://madou.club/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/madou.js",
+      "description": "从源 csp_madou 获取的影视站点: 麻豆社"
+    },
+    {
+      "id": "site_5_",
+      "name": "玩偶姐姐",
+      "icon": "https://hongkongdollvideo.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/hkdoll.js",
+      "description": "从源 csp_hkdoll 获取的影视站点: 玩偶姐姐"
+    },
+    {
+      "id": "site_6_hanime1",
+      "name": "Hanime1",
+      "icon": "https://hanime1.me/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/hanime1.js",
+      "description": "从源 csp_Hanime1 获取的影视站点: Hanime1"
+    },
+    {
+      "id": "site_7_live",
+      "name": "秋名山見(live)",
+      "icon": "http://api.maiyoux.com:81/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/harunasan.js",
+      "description": "从源 csp_harunasan 获取的影视站点: 秋名山見(live)"
+    },
+    {
+      "id": "site_8_supjav",
+      "name": "SupJav",
+      "icon": "https://supjav.com/zh/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/supjav.js",
+      "description": "从源 csp_SupJav 获取的影视站点: SupJav"
+    },
+    {
+      "id": "site_9_91jav",
+      "name": "91jav (無海報)",
+      "icon": "https://jdkir.triutpw.cc/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/91jav.js",
+      "description": "从源 csp_91jav 获取的影视站点: 91jav (無海報)"
+    },
+    {
+      "id": "site_10_hohoj",
+      "name": "hohoj",
+      "icon": "https://hohoj.tv/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/hohoj.js",
+      "description": "从源 csp_hohoj 获取的影视站点: hohoj"
+    },
+    {
+      "id": "site_11_koreapornmovie",
+      "name": "KoreaPornMovie",
+      "icon": "https://koreanpornmovie.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/kpm.js",
+      "description": "从源 csp_KPM 获取的影视站点: KoreaPornMovie"
+    },
+    {
+      "id": "site_12_ppphub",
+      "name": "pppHub",
+      "icon": "https://ppp.porn/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/ppron.js",
+      "description": "从源 csp_ppron 获取的影视站点: pppHub"
+    },
+    {
+      "id": "site_13_avtoday",
+      "name": "avtoday",
+      "icon": "https://avtoday.io/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/avtoday.js",
+      "description": "从源 csp_avtoday 获取的影视站点: avtoday"
+    },
+    {
+      "id": "site_14_xhamster",
+      "name": "xHamster",
+      "icon": "https://zh.xhamster.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/xhamster.js",
+      "description": "从源 csp_xhamster 获取的影视站点: xHamster"
+    },
+    {
+      "id": "site_15_pornhub",
+      "name": "Pornhub",
+      "icon": "https://cn.pornhub.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/pornhub.js",
+      "description": "从源 csp_pornhub 获取的影视站点: Pornhub"
+    },
+    {
+      "id": "site_16_jable",
+      "name": "jable",
+      "icon": "https://jable.tv/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/jable.js",
+      "description": "从源 csp_jable 获取的影视站点: jable"
+    },
+    {
+      "id": "site_17_",
+      "name": "花都影視",
+      "icon": "https://hd.huaduys.org/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/hdys.js",
+      "description": "从源 csp_hdys 获取的影视站点: 花都影視"
+    },
+    {
+      "id": "site_18_",
+      "name": "肉视频",
+      "icon": "https://rou.video/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/rou.js",
+      "description": "从源 csp_rou 获取的影视站点: 肉视频"
+    },
+    {
+      "id": "site_19_taiav",
+      "name": "Taiav",
+      "icon": "https://taiav.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/taiav.js",
+      "description": "从源 csp_Taiav 获取的影视站点: Taiav"
+    },
+    {
+      "id": "site_20_javmove",
+      "name": "JavMove",
+      "icon": "https://javmove.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/javmove.js",
+      "description": "从源 csp_JavMove 获取的影视站点: JavMove"
+    },
+    {
+      "id": "site_21_",
+      "name": "有爱爱",
+      "icon": "https://www.uaa.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/uaa.js",
+      "description": "从源 csp_uaa 获取的影视站点: 有爱爱"
+    },
+    {
+      "id": "site_22_avdb",
+      "name": "AVDB",
+      "icon": "https://avdbapi.com/api.php/provide/vod/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/avdb.js",
+      "description": "从源 csp_avdb 获取的影视站点: AVDB"
+    },
+    {
+      "id": "site_23_kanav",
+      "name": "KanAV",
+      "icon": "https://kanav.info/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/kanav.js",
+      "description": "从源 csp_kanav 获取的影视站点: KanAV"
+    },
+    {
+      "id": "site_24_kbjfan",
+      "name": "kbjfan",
+      "icon": "https://www.kbjfan.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/kbjfan.js",
+      "description": "从源 csp_kbjfan 获取的影视站点: kbjfan"
+    },
+    {
+      "id": "site_25_twivideo",
+      "name": "twivideo",
+      "icon": "https://twivideo.net/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/twivideo.js",
+      "description": "从源 csp_twivideo 获取的影视站点: twivideo"
+    },
+    {
+      "id": "site_26_javxx",
+      "name": "javxx",
+      "icon": "https://example.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/javxx.js",
+      "description": "从源 csp_javxx 获取的影视站点: javxx"
+    },
+    {
+      "id": "site_27_beeg",
+      "name": "beeg",
+      "icon": "https://beeg.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/beeg.js",
+      "description": "从源 csp_beeg 获取的影视站点: beeg"
+    }
+  ]
+}
