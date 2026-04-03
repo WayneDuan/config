@@ -190,7 +190,7 @@ async function getVideoDetail(videoId) {
 
     resolutions.unshift({
       id: 'auto',
-      name: '自动(Auto)',
+      name: '自动',
       url: masterM3u8,
       size: "未知"
     });
