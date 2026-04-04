@@ -621,19 +621,41 @@ async function getWebsiteInfo() {
     };
 }
 
+const OLE_TABS = [
+    { name: '电影', ext: { id: 1, type: 'movie' } },
+    { name: '电视剧', ext: { id: 2, type: 'drama' } },
+    { name: '短剧', ext: { id: 14, type: 'shortdrama' } },
+    { name: '综艺', ext: { id: 3, type: 'variety' } },
+    { name: '动漫', ext: { id: 4, type: 'anime' } },
+];
+
 async function getCategories() {
-    return (appConfig.tabs || []).map((tab, index) => ({
+    return OLE_TABS.map((tab, index) => ({
         id: String(index + 1),
         name: tab.name,
         ext: tab.ext,
     }));
 }
 
-async function getVideosByCategory(categoryId, page) {
+async function getSortOptions() {
+    return {
+        key: 'sort',
+        name: '排序',
+        init: 'update',
+        value: [
+            { n: '按最新', v: 'update' },
+            { n: '按添加', v: 'desc' },
+            { n: '按最热', v: 'hot' },
+            { n: '按评分', v: 'score' },
+        ],
+    };
+}
+
+async function getVideosByCategory(categoryId, page, sort) {
     const categories = await getCategories();
     const category = categories.find((item) => item.id === String(categoryId));
     if (!category) return [];
-    const extObj = { ...category.ext, page: page || 1 };
+    const extObj = { ...category.ext, page: page || 1, filters: { by: sort || 'update' } };
     const raw = await getCards(JSON.stringify(extObj));
     const result = JSON.parse(raw);
     return (result.list || []).map(item => ({
@@ -708,6 +730,7 @@ async function search(keyword) {
 module.exports = {
     getWebsiteInfo,
     getCategories,
+    getSortOptions,
     getVideosByCategory,
     getVideoList,
     getVideoDetail,
