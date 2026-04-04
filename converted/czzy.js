@@ -675,6 +675,7 @@ async function getWebsiteInfo() {
 }
 
 async function getCategories() {
+    await getConfig();
     return (appConfig.tabs || []).map((tab, index) => ({
         id: String(index + 1),
         name: tab.name,
