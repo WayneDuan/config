@@ -1,3 +1,10 @@
+// XPTV polyfills for app compatibility
+const jsonify = (data) => JSON.stringify(data);
+const argsify = (str) => {
+    if (typeof str === 'string') { try { return JSON.parse(str); } catch(e) { return str; } }
+    return str;
+};
+
 const CryptoJS = createCryptoJS()
 
 // 感謝 小了白了兔
@@ -6,6 +13,8 @@ const CryptoJS = createCryptoJS()
 //配置： {"site":"https://www.jiabaide.cn"}
 
 const UA =
+
+
     'Mozilla/5.0 (iPhone; CPU iPhone OS 18_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Mobile/15E148 Safari/604.1'
 
 let $config = argsify($config_str)

@@ -1,7 +1,16 @@
+// XPTV polyfills for app compatibility
+const jsonify = (data) => JSON.stringify(data);
+const argsify = (str) => {
+    if (typeof str === 'string') { try { return JSON.parse(str); } catch(e) { return str; } }
+    return str;
+};
+
 const cheerio = createCheerio()
 const CryptoJS = createCryptoJS()
 
 const appConfig = {
+
+
     ver: 1,
     title: '哔滴影视',
     // xlys.me

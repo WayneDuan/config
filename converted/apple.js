@@ -1,8 +1,17 @@
+// XPTV polyfills for app compatibility
+const jsonify = (data) => JSON.stringify(data);
+const argsify = (str) => {
+    if (typeof str === 'string') { try { return JSON.parse(str); } catch(e) { return str; } }
+    return str;
+};
+
 const CryptoJS = createCryptoJS()
 
 const UA = 'okhttp/3.12.11'
 
 let appConfig = {
+
+
     ver: 20250511,
     title: '小蘋果',
     // site: 'http://item.xpgcom.com',

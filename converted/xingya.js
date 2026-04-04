@@ -1,8 +1,17 @@
+// XPTV polyfills for app compatibility
+const jsonify = (data) => JSON.stringify(data);
+const argsify = (str) => {
+    if (typeof str === 'string') { try { return JSON.parse(str); } catch(e) { return str; } }
+    return str;
+};
+
 // xingya
 
 const CryptoJS = createCryptoJS()
 
 let appConfig = {
+
+
     ver: 1,
     title: '星芽短劇',
     site: 'https://app.whjzjx.cn',

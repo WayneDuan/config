@@ -1,9 +1,18 @@
+// XPTV polyfills for app compatibility
+const jsonify = (data) => JSON.stringify(data);
+const argsify = (str) => {
+    if (typeof str === 'string') { try { return JSON.parse(str); } catch(e) { return str; } }
+    return str;
+};
+
 const cheerio = createCheerio()
 const CryptoJS = createCryptoJS()
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.3'
 
 let appConfig = {
+
+
     ver: 1,
     title: '愛壹帆',
     site: 'https://m10.iyf.tv',

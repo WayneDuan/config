@@ -1,3 +1,10 @@
+// XPTV polyfills for app compatibility
+const jsonify = (data) => JSON.stringify(data);
+const argsify = (str) => {
+    if (typeof str === 'string') { try { return JSON.parse(str); } catch(e) { return str; } }
+    return str;
+};
+
 const CryptoJS = createCryptoJS()
 const cheerio = createCheerio()
 
@@ -6,6 +13,8 @@ let deviceId = '4E292B5D-FE99-4860-8054-5B0A11CC27AF'
 let vipToken = 'rrtv-bb3643e9bc9d62ebea4c30b20e7c313d5f57ab8a'
 
 let appConfig = {
+
+
     ver: 20251202,
     title: '人人',
     site: 'https://api.rrmj.plus',

@@ -1,6 +1,15 @@
+// XPTV polyfills for app compatibility
+const jsonify = (data) => JSON.stringify(data);
+const argsify = (str) => {
+    if (typeof str === 'string') { try { return JSON.parse(str); } catch(e) { return str; } }
+    return str;
+};
+
 const cheerio = createCheerio()
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
 const headers = {
+
+
   'Referer': 'https://www.libvio.la/',
   'Origin': 'https://www.libvio.la',
   'User-Agent': UA,
