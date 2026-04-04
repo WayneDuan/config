@@ -191,7 +191,7 @@ async function getVideoDetail(videoId) {
           if (playUrl) {
             resolutions.push({
               id: 'auto',
-              name: '自动(Auto)',
+              name: '自动',
               url: playUrl,
               size: '',
             });
