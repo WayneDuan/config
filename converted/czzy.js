@@ -673,9 +673,21 @@ async function getWebsiteInfo() {
         homepage: SITE,
     };
 }
+let tabsCache = null;
+let sessionReady = false;
 
+const baseHeaders = {
+  'User-Agent': UA,
+};
+
+async function ensureSession() {
+  if (sessionReady) return;
+  await $fetch.get(SITE + '/', { headers: baseHeaders, userAgent: UA });
+  sessionReady = true;
+}
 async function getCategories() {
     await getConfig();
+    await ensureSession();
     return (appConfig.tabs || []).map((tab, index) => ({
         id: String(index + 1),
         name: tab.name,
