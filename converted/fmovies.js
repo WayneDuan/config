@@ -428,21 +428,27 @@ async function getVideoDetail(videoId) {
     const extObj = { url: videoId, id: videoId };
     const raw = await getTracks(JSON.stringify(extObj));
     const result = JSON.parse(raw);
-    const tracks = result.list || [];
+    // getTracks returns: { list: [ { title: "线路名", tracks: [{name, pan, ext:{...}}] } ] }
+    const tracklist = result.list || [];
     const resolutions = [];
-    tracks.forEach(track => {
-        const urls = Array.isArray(track.urls) ? track.urls : [track.urls];
-        urls.forEach((url, i) => {
+    for (const source of tracklist) {
+        for (const track of (source.tracks || [])) {
+            let playUrl = '';
+            try {
+                const piRaw = await getPlayinfo(JSON.stringify(track.ext || {}));
+                const piResult = JSON.parse(piRaw);
+                playUrl = (piResult.urls || [])[0] || '';
+            } catch (e) {}
             resolutions.push({
-                id: String(track.vod_name || track.name || '') + (i > 0 ? '_' + i : ''),
-                name: String(track.vod_name || track.name || ''),
-                url: url,
+                id: source.title + '_' + track.name,
+                name: source.title + ' - ' + track.name,
+                url: playUrl,
             });
-        });
-    });
+        }
+    }
     return {
         id: videoId,
-        title: tracks[0] ? String(tracks[0].vod_name || tracks[0].name || '') : '',
+        title: tracklist[0] ? (tracklist[0].title || '') : '',
         cover: '',
         description: '',
         resolutions,
