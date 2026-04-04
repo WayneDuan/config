@@ -2,15 +2,203 @@
   "id": "wayne_app_sub_001",
   "name": "Wayne的福利订阅",
   "description": "从XPTV AV订阅源转换而来的应用订阅集合",
-  "updateTime": "2026-04-03T12:57:18.145Z",
+  "updateTime": "2026-04-04T12:00:00.000Z",
   "websites": [
     {
-      "id": "site_4_",
+      "id": "site_madou",
       "name": "麻豆社",
       "icon": "https://madou.club/favicon.ico",
       "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/madounew.js",
-      "description": "从源 csp_madou 获取的影视站点: 麻豆社"
+      "description": "获取的影视站点: 麻豆社"
+    },
+    {
+      "id": "xptv_czzy",
+      "name": "厂长资源",
+      "icon": "https://www.czzymovie.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/czzy.js",
+      "description": "获取的影视站点: 厂长资源"
+    },
+    {
+      "id": "xptv_fmovies",
+      "name": "fmovies",
+      "icon": "https://fmovies.llc/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/fmovies.js",
+      "description": "获取的影视站点: fmovies"
+    },
+    {
+      "id": "xptv_bdys",
+      "name": "哔滴影视",
+      "icon": "https://xl01.com.de/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/bdys.js",
+      "description": "获取的影视站点: 哔滴影视"
+    },
+    {
+      "id": "xptv_ole",
+      "name": "欧乐",
+      "icon": "https://api.olelive.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/ole.js",
+      "description": "获取的影视站点: 欧乐影视"
+    },
+    {
+      "id": "xptv_zxzj",
+      "name": "在线之家",
+      "icon": "https://www.zxzjhd.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/zxzj.js",
+      "description": "获取的影视站点: 在线之家"
+    },
+    {
+      "id": "xptv_libvio",
+      "name": "LIBVIO",
+      "icon": "https://www.libvio.la/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/libvio.js",
+      "description": "获取的影视站点: LIBVIO"
+    },
+    {
+      "id": "xptv_ai",
+      "name": "ギリギリ动漫",
+      "icon": "https://bgm.girigirilove.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/ai.js",
+      "description": "获取的影视站点: ギリギリ动漫"
+    },
+    {
+      "id": "xptv_duboku",
+      "name": "独播库",
+      "icon": "https://www.dbku.tv/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/duboku.js",
+      "description": "获取的影视站点: 独播库"
+    },
+    {
+      "id": "xptv_agedm",
+      "name": "AGE动漫",
+      "icon": "https://m.agedm.io/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/agedm.js",
+      "description": "获取的影视站点: AGE动漫"
+    },
+    {
+      "id": "xptv_4kav",
+      "name": "4k-av",
+      "icon": "https://4kmp.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/4kav.js",
+      "description": "获取的影视站点: 4k-av"
+    },
+    {
+      "id": "xptv_hjkk",
+      "name": "韓劇看看",
+      "icon": "https://www.hanjukankan.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/hjkk.js",
+      "description": "获取的影视站点: 韓劇看看"
+    },
+    {
+      "id": "xptv_jpyy",
+      "name": "金牌影院",
+      "icon": "https://www.jiabaide.cn/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/jpyy.js",
+      "description": "获取的影视站点: 金牌影院"
+    },
+    {
+      "id": "xptv_saohuo",
+      "name": "燒火電影",
+      "icon": "https://saohuo.tv/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/saohuo.js",
+      "description": "获取的影视站点: 燒火電影"
+    },
+    {
+      "id": "xptv_novipnoad",
+      "name": "NO視頻",
+      "icon": "https://www.novipnoad.net/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/novipnoad.js",
+      "description": "获取的影视站点: NO視頻"
+    },
+    {
+      "id": "xptv_xingya",
+      "name": "星芽短劇",
+      "icon": "https://app.whjzjx.cn/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/xingya.js",
+      "description": "获取的影视站点: 星芽短劇"
+    },
+    {
+      "id": "xptv_gzys",
+      "name": "瓜子影视",
+      "icon": "https://api.w32z7vtd.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/gzys.js",
+      "description": "获取的影视站点: 瓜子影视"
+    },
+    {
+      "id": "xptv_iyftv",
+      "name": "愛壹帆",
+      "icon": "https://m10.iyf.tv/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/iyftv.js",
+      "description": "获取的影视站点: 愛壹帆"
+    },
+    {
+      "id": "xptv_ystt",
+      "name": "影视天堂",
+      "icon": "https://ysttv.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/ystt.js",
+      "description": "获取的影视站点: 影视天堂"
+    },
+    {
+      "id": "xptv_apple",
+      "name": "小蘋果",
+      "icon": "http://item.xpgcom.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/apple.js",
+      "description": "获取的影视站点: 小蘋果"
+    },
+    {
+      "id": "xptv_aowu",
+      "name": "嗷嗚動漫",
+      "icon": "https://www.aowu.tv/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/aowu.js",
+      "description": "获取的影视站点: 嗷嗚動漫"
+    },
+    {
+      "id": "xptv_xiaohys",
+      "name": "小紅影視",
+      "icon": "https://www.xiaohys.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/xiaohys.js",
+      "description": "获取的影视站点: 小紅影視"
+    },
+    {
+      "id": "xptv_jianpian",
+      "name": "荐片",
+      "icon": "https://ev5356.970xw.com/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/jianpian.js",
+      "description": "获取的影视站点: 荐片"
+    },
+    {
+      "id": "xptv_rrmj",
+      "name": "人人",
+      "icon": "https://api.rrmj.plus/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/rrmj.js",
+      "description": "获取的影视站点: 人人"
+    },
+    {
+      "id": "xptv_anime1",
+      "name": "anime1",
+      "icon": "https://anime1.me/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/anime1.js",
+      "description": "获取的影视站点: anime1"
+    },
+    {
+      "id": "xptv_wwgz",
+      "name": "农民影视",
+      "icon": "https://vip.wwgz.cn:5200/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/wwgz.js",
+      "description": "获取的影视站点: 农民影视"
+    },
+    {
+      "id": "xptv_7sefun",
+      "name": "七色番動漫",
+      "icon": "https://www.7sefun.top/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/7sefun.js",
+      "description": "获取的影视站点: 七色番動漫"
+    },
+    {
+      "id": "xptv_symx",
+      "name": "山有木兮",
+      "icon": "https://www.symx.app/favicon.ico",
+      "jsUrl": "https://raw.githubusercontent.com/WayneDuan/config/refs/heads/main/converted/symx.js",
+      "description": "获取的影视站点: 山有木兮"
     }
-    
   ]
 }
