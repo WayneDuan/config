@@ -665,6 +665,19 @@ async function getWebsiteInfo() {
     };
 }
 
+async function getSortOptions() {
+    return {
+        key: 'order',
+        name: '排序',
+        init: 'time',
+        value: [
+        { n: '時間', v: 'time' },
+        { n: '人氣', v: 'hits' },
+        { n: '評分', v: 'score' }
+        ],
+    };
+}
+
 async function getCategories() {
     return (appConfig.tabs || []).map((tab, index) => ({
         id: String(index + 1),
@@ -673,11 +686,11 @@ async function getCategories() {
     }));
 }
 
-async function getVideosByCategory(categoryId, page) {
+async function getVideosByCategory(categoryId, page, sort) {
     const categories = await getCategories();
     const category = categories.find((item) => item.id === String(categoryId));
     if (!category) return [];
-    const extObj = { ...category.ext, page: page || 1 };
+    const extObj = { ...category.ext, page: page || 1, filters: { order: sort || 'time' } };
     const raw = await getCards(JSON.stringify(extObj));
     const result = JSON.parse(raw);
     return (result.list || []).map(item => ({
@@ -752,6 +765,7 @@ async function search(keyword) {
 module.exports = {
     getWebsiteInfo,
     getCategories,
+    getSortOptions,
     getVideosByCategory,
     getVideoList,
     getVideoDetail,
