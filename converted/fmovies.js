@@ -22,10 +22,6 @@ let appConfig = {
     ],
 }
 
-async function getConfig() {
-    return jsonify(appConfig)
-}
-
 async function getCards(ext) {
     ext = argsify(ext)
     let cards = []
@@ -359,12 +355,33 @@ async function getWebsiteInfo() {
     };
 }
 
+let tabsCache = null;
+let sessionReady = false;
+
+const baseHeaders = {
+  'User-Agent': UA,
+};
+
+async function ensureSession() {
+  if (sessionReady) return;
+  await $fetch.get(SITE + '/', { headers: baseHeaders, userAgent: UA });
+  sessionReady = true;
+}
+
+
 async function getCategories() {
-    return (appConfig.tabs || []).map((tab, index) => ({
-        id: String(index + 1),
-        name: tab.name,
-        ext: tab.ext,
-    }));
+    if (tabsCache) return tabsCache;
+  
+  await ensureSession();
+   let list = [];
+  let id = 1;
+     (appConfig.tabs || []).map((tab, index) => (list.push({
+      id: String(id++),
+      name: tab.name,
+      ext: { url: tab.ext.url }
+    })));
+  tabsCache = list;
+  return tabsCache;
 }
 
 async function getVideosByCategory(categoryId, page) {
